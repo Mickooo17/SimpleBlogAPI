@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleBlog.DTO\SimpleBlog.DTO.csproj" />
+    <ProjectReference Include="..\SimpleBlog.Entity\SimpleBlog.Entity.csproj" />
+    <ProjectReference Include="..\SimpleBlog.Exception\SimpleBlog.Exceptions.csproj" />
+  </ItemGroup>
+
+</Project>
