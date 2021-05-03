@@ -22,9 +22,9 @@ namespace SimpleBlog.API.Controllers
         }
 
         [HttpGet("{slug}")]
-        public async Task<ActionResult<GetPostResponse>> GetPost(string slug)
+        public ActionResult<GetPostResponse> GetPost(string slug)
         {
-            var result = await _postRepository.GetPost(slug);
+            var result = _postRepository.GetPost(slug);
             if (result.BlogPost == null)
                 return NotFound();
 
@@ -32,22 +32,22 @@ namespace SimpleBlog.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<GetPostsResponse>> GetPosts([FromQuery] GetPostsRequest request)
+        public ActionResult<GetPostsResponse> GetPosts([FromQuery] GetPostsRequest request)
         {
-            return Ok(await _postRepository.GetPosts(request));
+            return Ok( _postRepository.GetPosts(request));
         }
 
 
         [HttpPost]
-        public async Task<ActionResult<GetPostResponse>> CreatePost([FromBody] CreatePostRequest request)
+        public ActionResult<GetPostResponse> CreatePost([FromBody] CreatePostRequest request)
         {
-            return Ok(await _postRepository.CreatePost(request));
+            return Ok(_postRepository.CreatePost(request));
         }
 
         [HttpPut("{slug}")]
-        public async Task<ActionResult<GetPostResponse>> UpdatePost(string slug, [FromBody] UpdatePostRequest request)
+        public ActionResult<GetPostResponse> UpdatePost(string slug, [FromBody] UpdatePostRequest request)
         {
-            var result = await _postRepository.UpdatePost(slug, request);
+            var result = _postRepository.UpdatePost(slug, request);
             if (result == null)
                 return NotFound();
 
@@ -55,9 +55,9 @@ namespace SimpleBlog.API.Controllers
         }
 
         [HttpDelete("{slug}")]
-        public async Task<ActionResult<bool>> DeletePost(string slug)
+        public ActionResult<bool> DeletePost(string slug)
         {
-            var result = await _postRepository.DeletePost(slug);
+            var result = _postRepository.DeletePost(slug);
             if (result == false)
                 return NotFound(result);
 

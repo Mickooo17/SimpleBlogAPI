@@ -10,10 +10,10 @@ namespace SimpleBlog.Repository.Contracts
 {
     public interface IPostRepository
     {
-        Task<GetPostsResponse> GetPosts(GetPostsRequest request);
-        Task<GetPostResponse> GetPost(string slug);
-        Task<GetPostResponse> CreatePost(CreatePostRequest request);
-        Task<GetPostResponse> UpdatePost(string slug, UpdatePostRequest request);
-        Task<bool> DeletePost(string slug);
+        GetPostsResponse GetPosts(GetPostsRequest request);
+        GetPostResponse GetPost(string slug);
+        GetPostResponse CreatePost(CreatePostRequest request);
+        GetPostResponse UpdatePost(string slug, UpdatePostRequest request);
+        bool DeletePost(string slug);
     }
 }

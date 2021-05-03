@@ -24,11 +24,11 @@ namespace SimpleBlog.Repository
             this._context = SimpleBlogDbContext;
         }
 
-        public async Task<GetPostsResponse> GetPosts(GetPostsRequest request)
+        public GetPostsResponse GetPosts(GetPostsRequest request)
         {
             var response = new GetPostsResponse
             {
-                BlogPosts = await _context.Posts.Select(
+                BlogPosts = _context.Posts.Select(
                     x => new PostDto
                     {
                         Body = x.Body,
@@ -42,7 +42,7 @@ namespace SimpleBlog.Repository
                 )
                 .Where(x => request.Tag == null || x.TagList.Any(y => y == request.Tag))
                 .OrderByDescending(x => x.UpdatedAt)
-                .ToListAsync()
+                .ToList()
             };
 
             response.PostsCount = response.BlogPosts.Count();
@@ -50,11 +50,11 @@ namespace SimpleBlog.Repository
             return response;
         }
 
-        public async Task<GetPostResponse> GetPost(string slug)
+        public GetPostResponse GetPost(string slug)
         {
             return new GetPostResponse
             {
-                BlogPost = await _context.Posts
+                BlogPost = _context.Posts
                     .Where(e => e.Slug == slug)
                     .Select(x => new PostDto
                     {
@@ -66,11 +66,11 @@ namespace SimpleBlog.Repository
                         UpdatedAt = x.UpdatedAt,
                         TagList = x.TagList.Select(y => y.TagName)
                     })
-                    .FirstOrDefaultAsync()
+                    .FirstOrDefault()
             };
         }
 
-        public async Task<GetPostResponse> CreatePost(CreatePostRequest dto)
+        public GetPostResponse CreatePost(CreatePostRequest dto)
         {
             if (_context.Posts.Find(dto.BlogPost.Title.GetSlug()) != null)
                 throw new UserException("A post with the same slug already exists.");
@@ -98,23 +98,23 @@ namespace SimpleBlog.Repository
                 }
             }
 
-            await _context.Posts.AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return await GetPost(entity.Slug);
+            _context.Posts.Add(entity);
+            _context.SaveChanges();
+            return  GetPost(entity.Slug);
         }
 
-        public async Task<GetPostResponse> UpdatePost(string slug, UpdatePostRequest dto)
+        public GetPostResponse UpdatePost(string slug, UpdatePostRequest dto)
         {
-            var entity = await _context.Posts
+            var entity = _context.Posts
                 .Include(x => x.TagList)
-                .FirstOrDefaultAsync(e => e.Slug == slug);
+                .FirstOrDefault(e => e.Slug == slug);
 
             if (entity != null)
             {
                 if (!string.IsNullOrEmpty(dto.BlogPost.Title))
                 {
                     _context.Posts.Remove(entity);
-                    await _context.SaveChangesAsync();
+                     _context.SaveChanges();
 
                     entity = new Post
                     {
@@ -125,7 +125,7 @@ namespace SimpleBlog.Repository
                         Slug = dto.BlogPost.Title.GetSlug(),
                         TagList = entity.TagList
                     };
-                    await _context.Posts.AddAsync(entity);
+                    _context.Posts.Add(entity);
                 }
 
                 if (!string.IsNullOrEmpty(dto.BlogPost.Description))
@@ -139,22 +139,22 @@ namespace SimpleBlog.Repository
 
                 entity.UpdatedAt = DateTime.Now;
 
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
 
-                return await GetPost(entity.Slug);
+                return GetPost(entity.Slug);
             }
 
             return null;
         }
 
-        public async Task<bool> DeletePost(string slug)
+        public bool DeletePost(string slug)
         {
-            var result = await _context.Posts
-                .FirstOrDefaultAsync(e => e.Slug == slug);
+            var result = _context.Posts
+                .FirstOrDefault(e => e.Slug == slug);
             if (result != null)
             {
                 _context.Posts.Remove(result);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 return true;
             }
             return false;
