@@ -10,6 +10,6 @@ namespace SimpleBlog.Repository.Contracts
 {
     public interface ITagRepository
     {
-        Task<GetTagsResponse> GetTags();
+        GetTagsResponse GetTags();
     }
 }

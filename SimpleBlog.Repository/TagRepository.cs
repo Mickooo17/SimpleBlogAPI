@@ -24,13 +24,13 @@ namespace SimpleBlog.Repository
             this._context = SimpleBlogDbContext;
         }
 
-        public async Task<GetTagsResponse> GetTags()
+        public GetTagsResponse GetTags()
         {
             return new GetTagsResponse
             {
-                Tags = await _context.Tags.Select(
+                Tags = _context.Tags.Select(
                     x => x.TagName
-                ).ToListAsync()
+                ).ToList()
             };
         }
 

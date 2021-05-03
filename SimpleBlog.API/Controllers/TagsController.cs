@@ -22,9 +22,9 @@ namespace SimpleBlog.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<GetPostsResponse>> GetTags()
+        public ActionResult<GetPostsResponse> GetTags()
         {
-            return Ok(await _tagRepository.GetTags());
+            return Ok(_tagRepository.GetTags());
         }
 
     }
